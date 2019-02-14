@@ -44,3 +44,11 @@ class TestBaseModel(unittest.TestCase):
         Make sure updated_at is datetime data type
         """
         self.assertEqual(type(self.b1.updated_at), datetime)
+
+    def test_save(self):
+        """
+        Make sure save does update the updated_at attribute
+        """
+        self.assertEqual(self.b1.created_at, self.b1.updated_at)
+        self.b1.save()
+        self.assertNotEqual(self.b1.created_at, self.b1.updated_at)
