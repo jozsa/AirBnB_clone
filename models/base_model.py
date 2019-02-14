@@ -13,15 +13,16 @@ class BaseModel:
     def __str__(self):
         """ prints out a string representation of called instance """
         return "[{}] ({}) {}".format(
-                        type(self).__name__, self.id, self.__dict__)
+                    self.__class__.__name__, self.id, self.__dict__)
     def save(self):
         """ updates the current instance """
         self.updated_at = datetime.today()
 
-    def to_dict(self):
+    def to_dict(self, **kwargs):
         """ makes instance a dictionary """
-        self.__dict__['__class__'] = type(self).__name__
-        self.__dict__['created_at'] = datetime.isoformat(self.created_at)
-        self.__dict__['updated_at'] = datetime.isoformat(self.updated_at)
+        for key, value in kwargs.items():
+            if key is 'created_at' or key is 'updated_at':
+                value = datetime(value)
+            setattr(self, key, value)
         return self.__dict__
 
