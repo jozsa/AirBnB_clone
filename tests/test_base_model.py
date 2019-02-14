@@ -49,6 +49,24 @@ class TestBaseModel(unittest.TestCase):
         """
         Make sure save does update the updated_at attribute
         """
-        self.assertEqual(self.b1.created_at, self.b1.updated_at)
+        old_updated_at = self.b1.updated_at
         self.b1.save()
-        self.assertNotEqual(self.b1.created_at, self.b1.updated_at)
+        self.assertNotEqual(old_updated_at, self.b1.updated_at)
+
+    def test_str(self):
+        """
+        Testing return of __str__
+        """
+        self.assertEqual(str(self.b1), "[BaseModel] ({}) {}".format(self.b1.id, self.b1.__dict__))
+
+    def test_to_dict(self):
+        """
+        Make sure to_dict returns the right dictionary
+        and the dict has the right attributes with the right types.
+        """
+        model_json = self.b1.to_dict()
+        self.assertEqual(model_json, self.b1.__dict__)
+        self.assertEqual(type(model_json), dict)
+        self.assertTrue(hasattr(self.b1, '__class__'))
+        self.assertEqual(type(self.b1.created_at), str)
+        self.assertEqual(type(self.b1.updated_at), str)
