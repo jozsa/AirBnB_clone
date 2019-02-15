@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import uuid as uuid
 from datetime import datetime
+from models import storage
 
 class BaseModel:
     """ base class model for """
@@ -17,6 +18,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.today()
             self.updated_at = datetime.today()
+            storage.new(self)
 
     def __str__(self):
         """ prints out a string representation of called instance """
@@ -25,10 +27,14 @@ class BaseModel:
     def save(self):
         """ updates the current instance """
         self.updated_at = datetime.today()
+        storage.save()
 
     def to_dict(self):
         """ makes instance a dictionary """
-        self.__dict__['__class__'] = self.__class__.__name__
-        self.__dict__['created_at'] = datetime.isoformat(self.created_at)
-        self.__dict__['updated_at'] = datetime.isoformat(self.updated_at)
-        return self.__dict__
+        json_dict = {}
+        for key, value in self.__dict__.items():
+            json_dict[key] = value
+        json_dict['__class__'] = self.__class__.__name__
+        json_dict['created_at'] = datetime.isoformat(self.created_at)
+        json_dict['updated_at'] = datetime.isoformat(self.updated_at)
+        return json_dict
