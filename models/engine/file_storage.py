@@ -5,6 +5,7 @@ FileStorage will be able to serialize instances
 to JSON file & deserialize JSON file to instances
 """
 from models.base_model import BaseModel
+from models.user import User
 import json
 
 
@@ -37,7 +38,8 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path, encoding='utf-8') as json_file:
                 FileStorage.__objects = json.load(json_file)
-            for value in FileStorage.__objects.values():
-                value = self.new(BaseModel(**value))
+            for value in FileStorage.__objects.copy().values():
+                classname = value['__class__']
+                self.new(eval(classname)(**value))
         except FileNotFoundError:
             pass
