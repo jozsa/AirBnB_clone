@@ -121,6 +121,7 @@ class HBNBCommand(cmd.Cmd):
                         k = arg[2]
                         v = arg[3]
                         dict_to_update[k] = v
+                        models.storage.save()
                 else:
                     print('** no instance found **')
 
