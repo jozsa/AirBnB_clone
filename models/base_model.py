@@ -1,24 +1,23 @@
 #!/usr/bin/python3
 import uuid as uuid
 from datetime import datetime
-from models import storage
+import models
 
 class BaseModel:
     """ base class model for """
     def __init__(self, *args, **kwargs):
         """ initializes class with id and created at time"""
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.today()
+        self.updated_at = datetime.today()
         if kwargs:
             for key, value in kwargs.items():
-                if key is 'created_at' or key is 'updated_at':
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f") 
-                elif key is '__class__':
-                    value = self.__class__
-                setattr(self, key, value)
+                if key == 'created_at' or key == 'updated_at':
+                    self.__dict__[key] = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                else:
+                    self.__dict__[key] = value
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.today()
-            self.updated_at = datetime.today()
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """ prints out a string representation of called instance """
@@ -27,7 +26,7 @@ class BaseModel:
     def save(self):
         """ updates the current instance """
         self.updated_at = datetime.today()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """ makes instance a dictionary """
@@ -35,6 +34,6 @@ class BaseModel:
         for key, value in self.__dict__.items():
             json_dict[key] = value
         json_dict['__class__'] = self.__class__.__name__
-        json_dict['created_at'] = datetime.isoformat(self.created_at)
-        json_dict['updated_at'] = datetime.isoformat(self.updated_at)
+        json_dict['created_at'] = self.created_at.isoformat()
+        json_dict['updated_at'] = self.updated_at.isoformat()
         return json_dict
