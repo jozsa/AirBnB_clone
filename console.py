@@ -4,6 +4,7 @@ import readline
 import json
 import models
 from models.base_model import BaseModel
+from models.user import User
 from models.engine.file_storage import FileStorage
 
 class HBNBCommand(cmd.Cmd):
@@ -37,9 +38,8 @@ class HBNBCommand(cmd.Cmd):
         if arg is None:
             print("** class name missing **")
             pass
-        if arg == "BaseModel":
-            new = BaseModel(arg)
-            new.save()
+        if arg in HBNBCommand.classes:
+            new = eval(arg)()
             print(new)
         else:
             print("** class name doesn't exist **")
@@ -77,7 +77,6 @@ class HBNBCommand(cmd.Cmd):
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
                     FileStorage._FileStorage__objects.pop(key)
-                    models.storage.save()
                 else:
                     print('** no instance found **')
 
@@ -94,7 +93,7 @@ class HBNBCommand(cmd.Cmd):
             elif arg[0] in HBNBCommand.classes:
                 all_items = []
                 for value in FileStorage._FileStorage__objects.values():
-                    if value.__class__.__name__ == arg[0]:
+                    if arg[0] in value.__class__.__name__:
                         all_items.append(str(value))
                 print(all_items)
 
@@ -119,9 +118,9 @@ class HBNBCommand(cmd.Cmd):
                         print('** value missing **')
                     else:
                         k = arg[2]
-                        v = arg[3]
+                        attrtype = type(arg[2])
+                        v = attrtype(arg[3])
                         dict_to_update[k] = v
-                        models.storage.save()
                 else:
                     print('** no instance found **')
 
