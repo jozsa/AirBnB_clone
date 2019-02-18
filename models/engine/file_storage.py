@@ -16,6 +16,7 @@ import json
 
 class FileStorage:
     """
+        File storage handler for the console
     """
     __file_path = 'file.json'
     __objects = {}
