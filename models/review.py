@@ -3,7 +3,7 @@
 This module has one class: Review
 inherited from BaseModel
 """
-from models.base_mdoel import BaseModel
+from models.base_model import BaseModel
 
 
 class Review(BaseModel):
