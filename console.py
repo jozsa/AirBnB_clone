@@ -60,12 +60,13 @@ class HBNBCommand(cmd.Cmd):
         and saves to JSON file
         Usage: create <class name>
         """
-        if arg is None:
+        args = arg.split(" ")
+        if not args[0]:
             print("** class name missing **")
             pass
-        if arg in HBNBCommand.classes:
-            new = eval(arg)()
-            print(new)
+        elif args[0] in HBNBCommand.classes:
+            new = eval(args[0])()
+            print(new.id)
             models.storage.save()
         else:
             print("** class name doesn't exist **")
@@ -134,7 +135,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             arg = arg.split(' ')
             if arg[0] not in HBNBCommand.classes:
-                print(arg[0])
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
                 all_items = []
