@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""Unittest for class Base
+"""Unittest for class BaseModel
 """
 import unittest
-import uuid as uuid
 from datetime import datetime
 from models.base_model import BaseModel
+
 
 class TestBaseModel(unittest.TestCase):
     """Testing BaseModel"""
@@ -57,7 +57,8 @@ class TestBaseModel(unittest.TestCase):
         """
         Testing return of __str__
         """
-        self.assertEqual(str(self.b1), "[BaseModel] ({}) {}".format(self.b1.id, self.b1.__dict__))
+        self.assertEqual(str(self.b1), "[BaseModel] ({}) {}".
+                         format(self.b1.id, self.b1.__dict__))
 
     def test_to_dict(self):
         """
@@ -65,8 +66,18 @@ class TestBaseModel(unittest.TestCase):
         and the dict has the right attributes with the right types.
         """
         model_json = self.b1.to_dict()
-        self.assertEqual(model_json, self.b1.__dict__)
         self.assertEqual(type(model_json), dict)
-        self.assertTrue(hasattr(self.b1, '__class__'))
-        self.assertEqual(type(self.b1.created_at), str)
-        self.assertEqual(type(self.b1.updated_at), str)
+        self.assertTrue(hasattr(model_json, '__class__'))
+        self.assertEqual(type(model_json['created_at']), str)
+        self.assertEqual(type(model_json['updated_at']), str)
+
+    def test_kwargs(self):
+        """
+        Test passing kwargs to BaseModel instantation
+        """
+        json_dict = self.b1.to_dict()
+        b2 = BaseModel(**json_dict)
+        self.assertEqual(self.b1.id, b2.id)
+        self.assertEqual(self.b1.created_at, b2.created_at)
+        self.assertEqual(self.b1.updated_at, b2.updated_at)
+        self.assertNotEqual(self.b1, b2)
