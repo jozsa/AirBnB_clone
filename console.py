@@ -131,6 +131,8 @@ class HBNBCommand(cmd.Cmd):
             all_items = []
             for value in FileStorage._FileStorage__objects.values():
                 all_items.append(str(value))
+            if not all_items:
+                return
             print(all_items)
         else:
             arg = arg.split(' ')
@@ -141,6 +143,8 @@ class HBNBCommand(cmd.Cmd):
                 for value in FileStorage._FileStorage__objects.values():
                     if arg[0] in value.__class__.__name__:
                         all_items.append(str(value))
+                if not all_items:
+                    return
                 print(all_items)
 
     def do_update(self, arg):
