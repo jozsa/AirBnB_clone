@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+"""
+This module has one class: HBNBCommand.
+HBNBCommand inherits from cmd to create
+a command interpreter for our AirBnB clone.
+"""
 import cmd
 import readline
 import json
@@ -7,7 +12,17 @@ from models.base_model import BaseModel
 from models.user import User
 from models.engine.file_storage import FileStorage
 
+
 class HBNBCommand(cmd.Cmd):
+    """HBNBCommand handles the following commands:
+
+    EOF/'quit': exit the program
+    'create': creates instances of AirBnB clone objects
+    'show': prints string representation of an instance based on its id
+    'destroy': deletes an instance
+    'all': prints string representation of all instances
+    'update': updates an instance based on its id
+    """
     prompt = '(hbnb) '
     classes = [
         'BaseModel',
@@ -17,6 +32,7 @@ class HBNBCommand(cmd.Cmd):
         'Place',
         'Review'
     ]
+
     def do_EOF(self, arg):
         """Quit command to exit the program"""
         return True
@@ -26,25 +42,35 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """returns another empty line if an emptyline is passed in
-            Otherwise it'd repeat the last command given
-            """
+        """
+        Returns another empty line if an emptyline is passed in
+        Otherwise it'd repeat the last command given
+        """
         pass
 
     def do_create(self, arg):
-        """ creates a new instance of BaseModel
-            and saves to JSON file
-            """
+        """
+        Creates a new instance of any AirBnB clone class
+        and saves to JSON file
+        Usage: create <class name>
+        """
         if arg is None:
             print("** class name missing **")
             pass
         if arg in HBNBCommand.classes:
             new = eval(arg)()
             print(new)
+            models.storage.save()
         else:
             print("** class name doesn't exist **")
 
     def do_show(self, arg):
+        """
+        Prints the string representation of an instance
+        based on its ID number
+        Usage: show <class name> <id>
+        """
+        models.storage.reload()
         if len(arg) < 1:
             print("** class name missing **")
             pass
@@ -63,6 +89,10 @@ class HBNBCommand(cmd.Cmd):
                     print('** no instance found **')
 
     def do_destroy(self, arg):
+        """
+        Destroys an instance based on its ID number.
+        Usage: destroy <class name> <id>
+        """
         if len(arg) < 1:
             print("** class name missing **")
             pass
@@ -77,10 +107,19 @@ class HBNBCommand(cmd.Cmd):
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
                     FileStorage._FileStorage__objects.pop(key)
+                    models.storage.save()
                 else:
                     print('** no instance found **')
 
     def do_all(self, arg):
+        """
+        Prints the string representation of all instances.
+        If only "all" is passed, all instances will be printed.
+        If a class name is passed after "all", all instances of that
+        class will be printed.
+        Usage: all <class name>
+        """
+        models.storage.reload()
         if len(arg) < 1:
             all_items = []
             for value in FileStorage._FileStorage__objects.values():
@@ -89,6 +128,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             arg = arg.split(' ')
             if arg[0] not in HBNBCommand.classes:
+                print(arg[0])
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
                 all_items = []
@@ -98,10 +138,15 @@ class HBNBCommand(cmd.Cmd):
                 print(all_items)
 
     def do_update(self, arg):
-         if len(arg) < 1:
+        """
+        Updates an attribute of an instance based on its ID number.
+        Usage: update <class name> <id> <attribute> <value>
+        id, created_at, and updated_at cannot be updated.
+        """
+        if len(arg) < 1:
             print("** class name missing **")
             pass
-         else:
+        else:
             arg = arg.split(' ')
             if arg[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
@@ -111,7 +156,8 @@ class HBNBCommand(cmd.Cmd):
                     return
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
-                    dict_to_update = FileStorage._FileStorage__objects[key].__dict__
+                    dict_to_update = \
+                        FileStorage._FileStorage__objects[key].__dict__
                     if len(arg) < 3:
                         print('** attribute name missing **')
                     elif len(arg) < 4:
@@ -121,6 +167,7 @@ class HBNBCommand(cmd.Cmd):
                         attrtype = type(arg[2])
                         v = attrtype(arg[3])
                         dict_to_update[k] = v
+                        models.storage.save()
                 else:
                     print('** no instance found **')
 
