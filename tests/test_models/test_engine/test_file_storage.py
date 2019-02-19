@@ -2,6 +2,7 @@
 """Unittest for class FileStorage
 """
 import unittest
+import models
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -28,6 +29,20 @@ class TestFileStorage(unittest.TestCase):
         """Test type of __file_path"""
         self.assertTrue(isinstance(self.file_path, str))
 
+    def test_new(self):
+        """Test new works"""
+        model = BaseModel()
+        length = len(self.objects)
+        models.storage.new(model)
+        self.assertTrue(length == len(self.objects))
+
+    def test_reload(self):
+        """Test reload reloads the object"""
+        self.assertTrue(isinstance(self.objects, dict))
+
+    def test_all(self):
+        """Test reload reloads the object"""
+        self.assertTrue(isinstance(self.objects, dict))
 
 class TestBaseModelFileStorage(unittest.TestCase):
     """Test BaseModel file storage"""
