@@ -56,14 +56,19 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def precmd(self, line):
-        arg = line.split('.')
-        print(arg[0])
-        return(arg[0])
+        return(line)
 
     def default(self, arg):
-        print(arg)
-        my_objs = []
-        self.do_all(arg)
+        cmd_info = arg.split('.')
+        resource = cmd_info[0]
+        command = cmd_info[1].split('()')
+        if command[0] == 'all':
+            self.do_all(resource)
+        elif command [0] == 'count':
+            entries = FileStorage._FileStorage__objects
+            entry_list = str(entries.keys())
+            resource_count = entry_list.count(resource)
+            print(resource_count)
 
     def do_create(self, arg):
         """
