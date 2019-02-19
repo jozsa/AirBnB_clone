@@ -7,6 +7,7 @@ a command interpreter for our AirBnB clone.
 import cmd
 import readline
 import json
+import shlex
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -153,11 +154,12 @@ class HBNBCommand(cmd.Cmd):
         Usage: update <class name> <id> <attribute> <value>
         id, created_at, and updated_at cannot be updated.
         """
+        models.storage.reload()
         if len(arg) < 1:
             print("** class name missing **")
             pass
         else:
-            arg = arg.split(' ')
+            arg = shlex.split(arg)
             if arg[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
@@ -174,7 +176,7 @@ class HBNBCommand(cmd.Cmd):
                         print('** value missing **')
                     else:
                         k = arg[2]
-                        attrtype = type(arg[2])
+                        attrtype = type(dict_to_update[k])
                         v = attrtype(arg[3])
                         dict_to_update[k] = v
                         models.storage.save()
