@@ -176,7 +176,10 @@ class HBNBCommand(cmd.Cmd):
                         print('** value missing **')
                     else:
                         k = arg[2]
-                        attrtype = type(dict_to_update[k])
+                        try:
+                            attrtype = type(dict_to_update[k])
+                        except KeyError:
+                            attrtype = str
                         v = attrtype(arg[3])
                         dict_to_update[k] = v
                         models.storage.save()
