@@ -80,7 +80,7 @@ class HBNBCommand(cmd.Cmd):
             print(new.id)
             models.storage.save()
         else:
-            print("** class name doesn't exist **")
+            print("** class doesn't exist **")
 
     def do_show(self, arg):
         """
@@ -98,13 +98,13 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
                 if len(arg) < 2:
-                    print('** instance id missing **')
+                    print("** instance id missing **")
                     return
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
                     print(FileStorage._FileStorage__objects[key])
                 else:
-                    print('** no instance found **')
+                    print("** no instance found **")
 
     def do_destroy(self, arg):
         """
@@ -120,14 +120,14 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
                 if len(arg) < 2:
-                    print('** instance id missing **')
+                    print("** instance id missing **")
                     return
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
                     FileStorage._FileStorage__objects.pop(key)
                     models.storage.save()
                 else:
-                    print('** no instance found **')
+                    print("** no instance found **")
 
     def do_all(self, arg):
         """
@@ -146,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
                 return
             print(all_items)
         else:
-            arg = arg.split(' ')
+            arg = arg.split(" ")
             if arg[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
@@ -174,27 +174,27 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             elif arg[0] in HBNBCommand.classes:
                 if len(arg) < 2:
-                    print('** instance id missing **')
+                    print("** instance id missing **")
                     return
                 key = arg[0] + '.' + arg[1]
                 if key in FileStorage._FileStorage__objects:
                     dict_to_update = \
                         FileStorage._FileStorage__objects[key].__dict__
                     if len(arg) < 3:
-                        print('** attribute name missing **')
+                        print("** attribute name missing **")
                     elif len(arg) < 4:
-                        print('** value missing **')
+                        print("** value missing **")
                     else:
                         k = arg[2]
                         try:
                             attrtype = type(dict_to_update[k])
+                            v = attrtype(arg[3])
                         except KeyError:
-                            attrtype = str
-                        v = attrtype(arg[3])
+                            v = arg[3]
                         dict_to_update[k] = v
                         models.storage.save()
                 else:
-                    print('** no instance found **')
+                    print("** no instance found **")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
