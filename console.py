@@ -55,6 +55,16 @@ class HBNBCommand(cmd.Cmd):
         """
         pass
 
+    def precmd(self, line):
+        arg = line.split('.')
+        print(arg[0])
+        return(arg[0])
+
+    def default(self, arg):
+        print(arg)
+        my_objs = []
+        self.do_all(arg)
+
     def do_create(self, arg):
         """
         Creates a new instance of any AirBnB clone class
