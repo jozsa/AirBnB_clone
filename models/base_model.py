@@ -25,6 +25,8 @@ class BaseModel:
         self.updated_at = datetime.today()
         if kwargs:
             for key, value in kwargs.items():
+                if key == '__class__':
+                    pass
                 if key == 'created_at' or key == 'updated_at':
                     self.__dict__[key] = \
                         datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
@@ -51,4 +53,4 @@ class BaseModel:
         json_dict['__class__'] = self.__class__.__name__
         json_dict['created_at'] = self.created_at.isoformat()
         json_dict['updated_at'] = self.updated_at.isoformat()
-        return json_dict
+      return json_dict
