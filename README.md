@@ -15,20 +15,20 @@ Each instance of all classes that inherit from BaseModel will be instantiated wi
 - updated_at: datetime object reflecting when the instance was updated
 
 Methods:
-`__str__`: Overrides the default `__str__` method to print `[<class name>] (<self.id>) <self.__dict__>`
-`save(self)`: Updates `updated_at` with the current datetime
-`to_dict(self)`: Returns a dictionary containing all keys/value of the instance's `__dict__`
+- `__str__`: Overrides the default `__str__` method to print `[<class name>] (<self.id>) <self.__dict__>`
+- `save(self)`: Updates `updated_at` with the current datetime
+- `to_dict(self)`: Returns a dictionary containing all keys/value of the instance's `__dict__`
 
 ### FileStorage 
 FileStorage has the following private class attributes:
-`__file_path`: string, path to JSON file (in our case, it is `file.json`)
-`__objects`: dictionary, stores all instances with the key `<class name>.id`
+- `__file_path`: string, path to JSON file (in our case, it is `file.json`)
+- `__objects`: dictionary, stores all instances with the key `<class name>.id`
 
 Methods:
-`all(self)`: Returns `__objects` dictionary
-`new(self, obj)`: Adds the new object to the `__objects` dictionary with `<class name>.id` key
-`save(self)`: Serializes `__objects` into the JSON file contained in `__file_path`
-`reload(self)`: Deserializes JSON file contained in `__file_path` to `__objects`. If the file does not exist, nothing will happen.
+- `all(self)`: Returns `__objects` dictionary
+- `new(self, obj)`: Adds the new object to the `__objects` dictionary with `<class name>.id` key
+- `save(self)`: Serializes `__objects` into the JSON file contained in `__file_path`
+- `reload(self)`: Deserializes JSON file contained in `__file_path` to `__objects`. If the file does not exist, nothing will happen.
 
 ### Command Interpreter/Console
 The code for the command interpreter is in `console.py`.
@@ -58,7 +58,7 @@ Entering the `UP ARROW`	key will enter the previous command you typed the same w
 (hbnb) <UP ARROW> destroy BaseModel 5b4b2d85-263c-4b50-9b61-3241c84bf025 
 ```
 
-####EOF and quit
+#### EOF and quit
 Typing CTRL+D or `quit` into the console will exit the console.
 
 ```
@@ -70,7 +70,7 @@ $
 $
 ```
 
-####create
+#### create
 Usage: `create <class name>`
 Typing `create` followed by a class/subclass name will create a new instance of that class and print the id number of that new instance. However, if `create` is entered by itself or is followed by an invalid class name, an error will be printed.
 
@@ -87,7 +87,7 @@ dd657136-df6e-4e3c-848f-6b69b429ecae
 1e490720-7ddf-4188-8631-f7dcdb1ff808
 ```
 
-###show
+### show
 Usage: `show <class name> <instance id>`
 Typing `show` followed by a class name and a valid instance id will print the string representation of that instance. If just `show` is entered or is followed by an invalid class name or invalid instance id, an error will be printed.
 
@@ -104,7 +104,7 @@ Typing `show` followed by a class name and a valid instance id will print the st
 [Amenity] (1e490720-7ddf-4188-8631-f7dcdb1ff808) {'id': '1e490720-7ddf-4188-8631-f7dcdb1ff808', 'updated_at': datetime.datetime(2019, 2, 19, 22, 52, 49, 631171), 'created_at': datetime.datetime(2019, 2, 19, 22, 52, 49, 631152)}
 ```
 
-###destroy
+### destroy
 Usage: `destroy <class name> <instance id>`
 Typing `destroy` followed by a class name and a valid instance id will destroy that instance. If just `destroy` is entered or is followed by an invalid class name or invalid instance id, an error will be printed.
 
@@ -124,7 +124,7 @@ Typing `destroy` followed by a class name and a valid instance id will destroy t
 ** no instance found **
 ```
 
-###all
+### all
 Usage: `all` or `all <class name>`
 Typing `all` into the console will print the string representation of all existing instances. If `all` is followed by a class name, the string representation of all existing instances of that class will be printed. If the class name or id is invalid, an error message will be printed.
 
@@ -137,7 +137,7 @@ all NonExistent Clas
 ** class doesn't exist **
 ```
 
-###update
+### update
 Usage: `update <class name> <instance id> <attribute name> "<attribute value>"`
 Typing `update` with all the required arguments will update that instance' attribute (4th argument) with the value (5th argument). If any of the arguments after update are invalid or missing, an error message will be printed. Anything after the 5th argument will not be used. However, `id`, `created_at`, and `updated_at` cannot be updated, and only string/integer/float arguments can be updated.
 
