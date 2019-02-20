@@ -61,14 +61,38 @@ class HBNBCommand(cmd.Cmd):
     def default(self, arg):
         cmd_info = arg.split('.')
         resource = cmd_info[0]
-        command = cmd_info[1].split('()')
-        if command[0] == 'all':
+        parsed_arg = cmd_info[1].strip('()').split('(')
+        if parsed_arg[0] == 'all':
             self.do_all(resource)
-        elif command [0] == 'count':
+        elif parsed_arg[0] == 'count':
             entries = FileStorage._FileStorage__objects
             entry_list = str(entries.keys())
             resource_count = entry_list.count(resource)
             print(resource_count)
+        elif parsed_arg[0] == 'show':
+            payload = ''
+            payload += resource
+            payload += ' '
+            payload += parsed_arg[1]
+            self.do_show(payload)
+        elif parsed_arg[0] == 'destroy':
+            payload = ''
+            payload += resource
+            payload += ' '
+            payload += parsed_arg[1]
+            self.do_destroy(payload)
+        elif parsed_arg[0] == 'update':
+            payload = ''
+            payload += resource
+            payload += ' '
+            payload += parsed_arg[1]
+            payload += ' '
+            payload += parsed_arg[2]
+            payload += ' '
+            payload += parsed_arg[3]
+            self.do_update(payload)
+        else:
+            pass
 
     def do_create(self, arg):
         """
