@@ -1,129 +1,162 @@
+## Holberton BnB Project
 
-![](https://holbertonintranet.s3.amazonaws.com/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJIMMWEC6CH2PXSCQ%2F20190218%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20190218T231414Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=535150d32d28148f2e6b4da62789bba95c876d833a4f7b5037462a96674524da)
+### Holberton AirBnB clone project
+In this project, we implement the following:
+- `BaseModel` class for instantation of AirBnB clone objects
+- `User`, `State`, `City`, `Place`, `Amenity`, `Review` subclasses that inherit from `BaseModel`
+- Serialization/deserialization of instances
+- A storage engine for the project: `FileStorage`
+- A console/command interpreter where we can instantiate, store, destroy, and update attributes of objects, as well as print out the string representation of those objects
 
-## Background Context
+### BaseModel Class & Subclass Instance Attributes and Methods
+Each instance of all classes that inherit from BaseModel will be instantiated with the following attributes:
+- id: UUID generated string
+- created_at: datetime object reflecting when the instance was created
+- updated_at: datetime object reflecting when the instance was updated
 
-### Welcome to the AirBnB clone project! (The Holberton B&B)
-#### First step: Write a command interpreter to manage your AirBnB objects.
+Methods:
+`__str__`: Overrides the default `__str__` method to print `[<class name>] (<self.id>) <self.__dict__>`
+`save(self)`: Updates `updated_at` with the current datetime
+`to_dict(self)`: Returns a dictionary containing all keys/value of the instance's `__dict__`
 
-This is the first step towards building your first full web application: the  **AirBnB clone**. This first step is very important because you will use what you build during this project with all other following projects: HTML/CSS templating, database storage, API, front-end integration…
+### FileStorage 
+FileStorage has the following private class attributes:
+`__file_path`: string, path to JSON file (in our case, it is `file.json`)
+`__objects`: dictionary, stores all instances with the key `<class name>.id`
 
-Each task is linked and will help you to:
+Methods:
+`all(self)`: Returns `__objects` dictionary
+`new(self, obj)`: Adds the new object to the `__objects` dictionary with `<class name>.id` key
+`save(self)`: Serializes `__objects` into the JSON file contained in `__file_path`
+`reload(self)`: Deserializes JSON file contained in `__file_path` to `__objects`. If the file does not exist, nothing will happen.
 
--   put in place a parent class (called  `BaseModel`) to take care of the initialization, serialization and deserialization of your future instances
--   create a simple flow of serialization/deserialization: Instance <-> Dictionary <-> JSON string <-> file
--   create all classes used for AirBnB (`User`,  `State`,  `City`,  `Place`…) that inherit from  `BaseModel`
--   create the first abstracted storage engine of the project: File storage.
--   create all unittests to validate all our classes and storage engine
+### Command Interpreter/Console
+The code for the command interpreter is in `console.py`.
 
-### What’s a command interpreter?
+To start the console, type `./console.py` or `python3 console.py` in the directory `console.py` is in. This will make the command prompt `(hbnb)` appear on your terminal.
 
-Do you remember the Shell? It’s exactly the same but limited to a specific use-case. In our case, we want to be able to manage the objects of our project:
-
--   Create a new object (ex: a new User or a new Place)
--   Retrieve an object from a file, a database etc…
--   Do operations on objects (count, compute stats, etc…)
--   Update attributes of an object
--   Destroy an object
-
-## Resources
-
-**Read or watch**:
-
--   [cmd module](https://intranet.hbtn.io/rltoken/Fx9HXIjmGzbmET4ylYg2Rw "cmd module")
--   [packages](https://intranet.hbtn.io/rltoken/jKl9WFpKA-fPt7_guv9_3Q "packages")
--   [uuid module](https://intranet.hbtn.io/rltoken/eaQ6aELbdqb0WmPddhD00g "uuid module")
--   [datetime](https://intranet.hbtn.io/rltoken/_ySDcgtfrwLkTyQzYHTH0Q "datetime")
--   [unittest module](https://intranet.hbtn.io/rltoken/QX7d4D__xhOJIGIWZBp39g "unittest module")
--   [args/kwargs](https://intranet.hbtn.io/rltoken/atDO4tM1Ih5hyuAp4zdOYA "args/kwargs")
--   [Python test cheatsheet](https://intranet.hbtn.io/rltoken/WPlydsqB0PG0uVcixemv9A "Python test cheatsheet")
-
-## Learning Objectives
-
-At the end of this project, you are expected to be able to  [explain to anyone](https://intranet.hbtn.io/rltoken/MwKclAaCLNksSms8I-LuXw "explain to anyone"),  **without the help of Google**:
-
-### General
-
--   How to create a Python package
--   How to create a command interpreter in Python using the  `cmd`  module
--   What is Unit testing and how to implement it in a large project
--   How to serialize and deserialize a Class
--   How to write and read a JSON file
--   How to manage  `datetime`
--   What is an  `UUID`
--   What is  `*args`  and how to use it
--   What is  `**kwargs`  and how to use it
--   How to handle named arguments in a function
-
-## Requirements
-
-### Python Scripts
-
--   Allowed editors:  `vi`,  `vim`,  `emacs`
--   All your files will be interpreted/compiled on Ubuntu 14.04 LTS using  `python3`  (version 3.4.3)
--   All your files should end with a new line
--   The first line of all your files should be exactly  `#!/usr/bin/python3`
--   A  `README.md`  file, at the root of the folder of the project, is mandatory
--   Your code should use the  `PEP 8`  style (version 1.7 or more)
--   All your files must be executable
--   The length of your files will be tested using  `wc`
--   All your modules should have a documentation (`python3 -c 'print(__import__("my_module").__doc__)'`)
--   All your classes should have a documentation (`python3 -c 'print(__import__("my_module").MyClass.__doc__)'`)
--   All your functions (inside and outside a class) should have a documentation (`python3 -c 'print(__import__("my_module").my_function.__doc__)'`  and  `python3 -c 'print(__import__("my_module").MyClass.my_function.__doc__)'`)
-
-### Python Unit Tests
-
--   Allowed editors:  `vi`,  `vim`,  `emacs`
--   All your files should end with a new line
--   All your test files should be inside a folder  `tests`
--   You have to use the  [unittest module](https://intranet.hbtn.io/rltoken/QX7d4D__xhOJIGIWZBp39g "unittest module")
--   All your test files should be python files (extension:  `.py`)
--   All your test files and folders should start by  `test_`
--   Your file organization in the tests folder should be the same as your project
--   e.g., For  `models/base_model.py`, unit tests must be in:  `tests/test_models/test_base_model.py`
--   e.g., For  `models/user.py`, unit tests must be in:  `tests/test_models/test_user.py`
--   All your tests should be executed by using this command:  `python3 -m unittest discover tests`
--   You can also test file by file by using this command:  `python3 -m unittest tests/test_models/test_base_model.py`
--   All your modules should have a documentation (`python3 -c 'print(__import__("my_module").__doc__)'`)
--   All your classes should have a documentation (`python3 -c 'print(__import__("my_module").MyClass.__doc__)'`)
--   All your functions (inside and outside a class) should have a documentation (`python3 -c 'print(__import__("my_module").my_function.__doc__)'`  and  `python3 -c 'print(__import__("my_module").MyClass.my_function.__doc__)'`)
--   We strongly encourage you to work together on test cases, so that you don’t miss any edge case
-
-## Getting Started
-
- ### How to run the program in interactive mode
 ```
 $ ./console.py
-(hbnb) help
-
-Documented commands (type help <topic>):
-EOF  help  quit
-
 (hbnb) 
-(hbnb) 
+```
+
+### Usage
+The console accepts the following commands: `EOF (CTRL+D)`, `quit`, `create`, `show`, `destroy`, `all`, and `update`.
+
+Command completion and command history are supported. 
+
+Entering `<TAB>` will autocomplete or show you the options for autocompletion.
+
+```
+(hbnb) <TAB>
+EOF	all	create	destroy	help	quit	show	update
+```
+Entering the `UP ARROW`	key will enter the previous command you typed the same way the regular bash shell will.
+
+```
+(hbnb) destroy BaseModel 5b4b2d85-263c-4b50-9b61-3241c84bf025
+(hbnb) <UP ARROW> destroy BaseModel 5b4b2d85-263c-4b50-9b61-3241c84bf025 
+```
+
+####EOF and quit
+Typing CTRL+D or `quit` into the console will exit the console.
+
+```
 (hbnb) quit
 $
 ```
-###  How to run the program in non-interactive mode
 ```
-$ echo "help" | ./console.py
-(hbnb)
-
-Documented commands (type help <topic>):
-EOF  help  quit
-(hbnb) 
-$
-$ cat test_help
-help
-$
-$ cat test_help | ./console.py
-(hbnb)
-
-Documented commands (type help <topic>):
-
-EOF  help  quit
-(hbnb) 
+(hbnb) ^C
 $
 ```
-### Diagram of where the console fits into the scheme of things
-![Diagram of where the console fits into the scheme of things](https://holbertonintranet.s3.amazonaws.com/uploads/medias/2018/6/815046647d23428a14ca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJIMMWEC6CH2PXSCQ/20190218/us-east-1/s3/aws4_request&X-Amz-Date=20190218T231414Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=e63c217afcb8dd8e193bf11767ee8941eb905defa9d3da7a6d9b793aa71c1890)
+
+####create
+Usage: `create <class name>`
+Typing `create` followed by a class/subclass name will create a new instance of that class and print the id number of that new instance. However, if `create` is entered by itself or is followed by an invalid class name, an error will be printed.
+
+```
+(hbnb) create
+** class name missing **
+(hbnb) create NonExistentClass
+** class doesn't exist **
+(hbnb) create BaseModel
+dd657136-df6e-4e3c-848f-6b69b429ecae
+(hbnb) create User
+94fe025f-d318-4cb9-92c4-daeeefebedda
+(hbnb) create Amenity
+1e490720-7ddf-4188-8631-f7dcdb1ff808
+```
+
+###show
+Usage: `show <class name> <instance id>`
+Typing `show` followed by a class name and a valid instance id will print the string representation of that instance. If just `show` is entered or is followed by an invalid class name or invalid instance id, an error will be printed.
+
+```
+(hbnb) show
+** class name missing **
+(hbnb) show NonExistentClass
+** class doesn't exist **
+(hbnb) show Amenity
+** instance id missing **
+(hbnb) show Amenity 600
+** no instance found **
+(hbnb) show Amenity 1e490720-7ddf-4188-8631-f7dcdb1ff808
+[Amenity] (1e490720-7ddf-4188-8631-f7dcdb1ff808) {'id': '1e490720-7ddf-4188-8631-f7dcdb1ff808', 'updated_at': datetime.datetime(2019, 2, 19, 22, 52, 49, 631171), 'created_at': datetime.datetime(2019, 2, 19, 22, 52, 49, 631152)}
+```
+
+###destroy
+Usage: `destroy <class name> <instance id>`
+Typing `destroy` followed by a class name and a valid instance id will destroy that instance. If just `destroy` is entered or is followed by an invalid class name or invalid instance id, an error will be printed.
+
+```
+(hbnb) destroy
+** class name missing **
+(hbnb) destroy NonExistentClass
+** class doesn't exist **
+(hbnb) destroy Place
+** instance id missing **
+(hbnb) destroy Place 710
+** no instance found **
+(hbnb) show Place f498136c-76eb-4716-802e-87c9b5427d69
+[Place] (f498136c-76eb-4716-802e-87c9b5427d69) {'id': 'e263b68e-e70c-4a61-a4fe-4c58f097a5f7', 'updated_at': datetime.datetime(2019, 2, 19, 20, 44, 26, 967981), 'created_at': datetime.datetime(2019, 2, 19, 20, 44, 26, 967955)}
+(hbnb) destroy Place f498136c-76eb-4716-802e-87c9b5427d69
+(hbnb) show Place f498136c-76eb-4716-802e-87c9b5427d69
+** no instance found **
+```
+
+###all
+Usage: `all` or `all <class name>`
+Typing `all` into the console will print the string representation of all existing instances. If `all` is followed by a class name, the string representation of all existing instances of that class will be printed. If the class name or id is invalid, an error message will be printed.
+
+```
+(hbnb) all
+["[Review] (f1941050-9e2c-47db-a13c-17ea81a78a3c) {'id': 'f1941050-9e2c-47db-a13c-17ea81a78a3c', 'updated_at': datetime.datetime(2019, 2, 19, 20, 48, 32, 606662), 'created_at': datetime.datetime(2019, 2, 19, 20, 48, 32, 606622)}", "[City] (79cec983-a8d1-4ca8-ad8f-9b6638e70184) {'id': '79cec983-a8d1-4ca8-ad8f-9b6638e70184', 'updated_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869135), 'created_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869097)}", "[Amenity] (bf75ecd4-3dfc-4390-9165-5b8229960fde) {'id': 'bf75ecd4-3dfc-4390-9165-5b8229960fde', 'updated_at': datetime.datetime(2019, 2, 19, 20, 37, 10, 805186), 'created_at': datetime.datetime(2019, 2, 19, 20, 37, 10, 805160)}", "[Place] (9ad1f688-ca26-46c3-9f2d-651584c67ae2) {'id': '9ad1f688-ca26-46c3-9f2d-651584c67ae2', 'updated_at': datetime.datetime(2019, 2, 19, 20, 45, 53, 340386), 'created_at': datetime.datetime(2019, 2, 19, 20, 45, 53, 340324)}", "[State] (34696c94-e1fc-4085-864c-388cfbe2db82) {'id': '34696c94-e1fc-4085-864c-388cfbe2db82', 'updated_at': datetime.datetime(2019, 2, 19, 20, 43, 53, 386865), 'created_at': datetime.datetime(2019, 2, 19, 20, 43, 53, 386814)}"]
+(hbnb) all Review
+["[Review] (f1941050-9e2c-47db-a13c-17ea81a78a3c) {'id': 'f1941050-9e2c-47db-a13c-17ea81a78a3c'    , 'updated_at': datetime.datetime(2019, 2, 19, 20, 48, 32, 606662), 'created_at': datetime.date    time(2019, 2, 19, 20, 48, 32, 606622)}"]
+all NonExistent Clas
+** class doesn't exist **
+```
+
+###update
+Usage: `update <class name> <instance id> <attribute name> "<attribute value>"`
+Typing `update` with all the required arguments will update that instance' attribute (4th argument) with the value (5th argument). If any of the arguments after update are invalid or missing, an error message will be printed. Anything after the 5th argument will not be used. However, `id`, `created_at`, and `updated_at` cannot be updated, and only string/integer/float arguments can be updated.
+
+```
+(hbnb) update
+** class name missing **
+(hbnb) update NonExistentClass
+** class doesn't exist **
+(hbnb) update City
+** instance id missing **
+(hbnb) update City 710
+** no instance found **
+(hbnb) update City 79cec983-a8d1-4ca8-ad8f-9b6638e70184
+** attribute name missing **
+(hbnb) update City 79cec983-a8d1-4ca8-ad8f-9b6638e70184 name
+** value missing **
+(hbnb) show City 79cec983-a8d1-4ca8-ad8f-9b6638e70184
+[City] (79cec983-a8d1-4ca8-ad8f-9b6638e70184) {'id': '79cec983-a8d1-4ca8-ad8f-9b6638e70184', 'updated_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869135), 'created_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869097)}
+(hbnb) update City 79cec983-a8d1-4ca8-ad8f-9b6638e70184 name "San Francisco"
+(hbnb) show City 79cec983-a8d1-4ca8-ad8f-9b6638e70184
+[City] (79cec983-a8d1-4ca8-ad8f-9b6638e70184) {'id': '79cec983-a8d1-4ca8-ad8f-9b6638e70184', 'created_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869097), 'updated_at': datetime.datetime(2019, 2, 19, 20, 35, 59, 869135), 'name': 'San Francisco'}
+```
