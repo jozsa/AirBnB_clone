@@ -59,40 +59,34 @@ class HBNBCommand(cmd.Cmd):
         return(line)
 
     def default(self, arg):
-        cmd_info = arg.split('.')
-        resource = cmd_info[0]
-        parsed_arg = cmd_info[1].strip('()').split('(')
-        if parsed_arg[0] == 'all':
-            self.do_all(resource)
-        elif parsed_arg[0] == 'count':
-            entries = FileStorage._FileStorage__objects
-            entry_list = str(entries.keys())
-            resource_count = entry_list.count(resource)
-            print(resource_count)
-        elif parsed_arg[0] == 'show':
-            payload = ''
-            payload += resource
-            payload += ' '
-            payload += parsed_arg[1]
-            self.do_show(payload)
-        elif parsed_arg[0] == 'destroy':
-            payload = ''
-            payload += resource
-            payload += ' '
-            payload += parsed_arg[1]
-            self.do_destroy(payload)
-        elif parsed_arg[0] == 'update':
-            payload = ''
-            payload += resource
-            payload += ' '
-            payload += parsed_arg[1]
-            payload += ' '
-            payload += parsed_arg[2]
-            payload += ' '
-            payload += parsed_arg[3]
-            self.do_update(payload)
-        else:
-            pass
+        try:
+            cmd_info = arg.split('.')
+            resource = cmd_info[0]
+            parsed_arg = cmd_info[1].strip('()').split('(')
+            if parsed_arg[0] == 'all':
+                self.do_all(resource)
+            elif parsed_arg[0] == 'count':
+                entries = FileStorage._FileStorage__objects
+                entry_list = str(entries.keys())
+                resource_count = entry_list.count(resource)
+                print(resource_count)
+            elif parsed_arg[0] == 'show':
+                payload = ''
+                payload = resource + ' ' + parsed_arg[1]
+                self.do_show(payload)
+            elif parsed_arg[0] == 'destroy':
+                payload = ''
+                payload = resource + ' ' + parsed_arg[1]
+                self.do_destroy(payload)
+            elif parsed_arg[0] == 'update':
+                options = parsed_arg[1].replace(',', '')
+                payload = ""
+                payload = resource + ' ' + options + '"'
+                self.do_update(payload)
+            else:
+                pass
+        except IndexError:
+            self.stdout.write('*** Unknown syntax: %s\n'%arg)
 
     def do_create(self, arg):
         """
