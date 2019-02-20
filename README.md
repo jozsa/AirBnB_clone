@@ -66,7 +66,7 @@ Typing CTRL+D or `quit` into the console will exit the console.
 $
 ```
 ```
-(hbnb) ^C
+(hbnb) ^D
 $
 ```
 
