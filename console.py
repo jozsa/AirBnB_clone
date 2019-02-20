@@ -79,9 +79,8 @@ class HBNBCommand(cmd.Cmd):
                 payload = resource + ' ' + parsed_arg[1]
                 self.do_destroy(payload)
             elif parsed_arg[0] == 'update':
-                options = parsed_arg[1].replace(',', '')
-                payload = ""
-                payload = resource + ' ' + options + '"'
+                options = str(parsed_arg[1].replace(',', ''))
+                payload = resource + ' ' + options
                 self.do_update(payload)
             else:
                 pass
