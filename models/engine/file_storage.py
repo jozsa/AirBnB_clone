@@ -47,5 +47,7 @@ class FileStorage:
             for value in FileStorage.__objects.copy().values():
                 classname = value['__class__']
                 self.new(eval(classname)(**value))
+                print('added obj')
+                print(self.__objects)
         except FileNotFoundError:
             pass
