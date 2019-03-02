@@ -70,11 +70,15 @@ button:hover {
 .popover li {
 	list-style: none;
 	line-height: 175%;
-	margin-left: 30px;
+	padding-left: 30px;
+}
+
+.popover ul {
+	padding-left: 20px;
 }
 
 .popover ul li {
-	margin-left: 15px;
+	padding-left: 0px;
 }
 
 .locations:hover .popover {
